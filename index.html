@@ -1,445 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI News Portal</title>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-text-size-adjust: 100%; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; background: #f4f6f8; line-height: 1.6; }
-.top-bar { background: #0a1628; color: #fff; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.top-bar-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 60px; }
-.logo { font-size: 1.35rem; font-weight: 800; letter-spacing: 1.5px; color: #fff; text-decoration: none; }
-.logo span { color: #3b82f6; }
-.nav-links { display: flex; gap: 4px; }
-.nav-links a { color: #94a3b8; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
-.nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(59,130,246,0.2); }
-.hero { background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 100%); color: #fff; padding: 48px 24px; }
-.hero-inner { max-width: 1280px; margin: 0 auto; }
-.hero-label { display: inline-block; background: #dc2626; color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-.hero h1 { font-size: 2.2rem; line-height: 1.2; margin-bottom: 12px; max-width: 800px; }
-.hero p { font-size: 1.05rem; color: #cbd5e1; max-width: 700px; margin-bottom: 20px; line-height: 1.5; }
-.hero-meta { font-size: 0.85rem; color: #94a3b8; }
-.hero-meta span { margin-right: 16px; }
-.hero-link { display: inline-block; margin-top: 16px; background: #3b82f6; color: #fff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
-.hero-link:hover { background: #2563eb; }
-.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-.section-tabs { display: flex; gap: 4px; margin: 32px 0 24px; border-bottom: 2px solid #e2e8f0; padding-bottom: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.section-tab { padding: 12px 24px; background: none; border: none; font-size: 0.9rem; font-weight: 700; color: #64748b; cursor: pointer; position: relative; white-space: nowrap; transition: color 0.2s; border-radius: 8px 8px 0 0; }
-.section-tab:hover { color: #1e3a5f; background: #f1f5f9; }
-.section-tab.active { color: #1e40af; background: #eff6ff; }
-.section-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: #3b82f6; }
-.section-content { display: none; }
-.section-content.active { display: block; }
-.article-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
-.article-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
-.article-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-.article-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
-.article-card-body { padding: 16px 20px 20px; }
-.article-card-category { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #3b82f6; margin-bottom: 6px; }
-.article-card h3 { font-size: 1.05rem; line-height: 1.4; margin-bottom: 8px; color: #1a1a2e; }
-.article-card p { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 12px; }
-.article-card-meta { font-size: 0.75rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; }
-.article-card-link { color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
-.article-card-link:hover { text-decoration: underline; }
-.footer { background: #0a1628; color: #94a3b8; padding: 32px 24px; text-align: center; font-size: 0.85rem; margin-top: 48px; }
-.footer strong { color: #fff; }
-
-/* Article detail page */
-.article-detail { max-width: 800px; margin: 0 auto; padding: 32px 24px; }
-.article-detail .back-link { display: inline-flex; align-items: center; gap: 6px; color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-bottom: 24px; }
-.article-detail .back-link:hover { text-decoration: underline; }
-.article-detail .detail-header { margin-bottom: 24px; }
-.article-detail .detail-category { display: inline-block; background: #eff6ff; color: #1e40af; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-.article-detail h1 { font-size: 2rem; line-height: 1.3; margin-bottom: 12px; color: #0a1628; }
-.article-detail .detail-meta { display: flex; gap: 20px; font-size: 0.85rem; color: #64748b; margin-bottom: 24px; flex-wrap: wrap; }
-.article-detail .detail-image { width: 100%; max-height: 450px; object-fit: cover; border-radius: 10px; margin-bottom: 24px; }
-.article-detail .detail-content { font-size: 1.05rem; line-height: 1.8; color: #334155; }
-.article-detail .detail-content p { margin-bottom: 16px; }
-.article-detail .detail-source { margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; }
-.article-detail .detail-source a { color: #3b82f6; }
-
-@media (max-width: 900px) {
-  .article-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero h1 { font-size: 1.6rem; }
-  .article-detail h1 { font-size: 1.5rem; }
-}
-@media (max-width: 600px) {
-  .article-grid { grid-template-columns: 1fr; }
-  .top-bar-inner { padding: 0 16px; }
-  .nav-links a { padding: 6px 10px; font-size: 0.75rem; }
-  .hero { padding: 32px 16px; }
-  .hero h1 { font-size: 1.3rem; }
-  .container { padding: 0 16px; }
-  .section-tab { padding: 10px 14px; font-size: 0.8rem; }
-  .article-detail { padding: 24px 16px; }
-  .article-detail h1 { font-size: 1.3rem; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI NEWS PORTAL - Daily AI News, Trends, Tools &amp; Careers</title>
+  <meta name="description" content="Your daily source for AI news, trends, tools, company updates, and career insights. Stay informed with the latest in artificial intelligence.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Critical inline CSS */
+    .site-header { background: #003366; }
+  </style>
 </head>
 <body>
-<div class="top-bar">
-  <div class="top-bar-inner">
-    <a href="/" class="logo">AI <span>NEWS PORTAL</span></a>
-    <nav class="nav-links">
-      <a href="/" class="active">Home</a>
-      <a href="#trends" onclick="switchTab('TRENDS')">Trends</a>
-      <a href="#tools" onclick="switchTab('TOOLS')">Tools</a>
-      <a href="#companies" onclick="switchTab('COMPANIES')">Companies</a>
-      <a href="#jobs" onclick="switchTab('JOBS')">Jobs</a>
-    </nav>
-  </div>
-</div>
-
-
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-label">Breaking News</div>
-    <h1>LLMs-from-scratch: Build a ChatGPT-like LLM in PyTorch</h1>
-    <p>Sebastian Raschka's LLMs-from-scratch guide with 95K GitHub stars walks through building a complete LLM from scratch in PyTorch.</p>
-    <div class="hero-meta"><span>May 15, 2026</span><span>GitHub</span><span>1 min read</span></div>
-    <a href="articles/ai-github-739bf9e4dce9.html" class="hero-link">Read Full Story →</a>
-  </div>
-</div>
-
-<div class="container">
-  <div class="section-tabs" role="tablist">
-<button class="section-tab active" data-tab="TRENDS" role="tab" aria-selected="true" onclick="switchTab('TRENDS')">Trends</button>
-<button class="section-tab" data-tab="TOOLS" role="tab" aria-selected="false" onclick="switchTab('TOOLS')">Tools</button>
-<button class="section-tab" data-tab="COMPANIES" role="tab" aria-selected="false" onclick="switchTab('COMPANIES')">Companies</button>
-<button class="section-tab" data-tab="JOBS" role="tab" aria-selected="false" onclick="switchTab('JOBS')">Jobs</button>
-</div>
-  
-  <div class="section-content active" id="section-TRENDS" role="tabpanel">
-    <div class="article-grid">
-      <article class="article-card">
-<a href="articles/ai-mean-c-06ec046dddb8.html"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop" alt="AI model race accelerates: GPT-5.5, Opus 4.7, Gemini 3.1 all ship within weeks" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-mean-c-06ec046dddb8.html" style="color:inherit;text-decoration:none">AI model race accelerates: GPT-5.5, Opus 4.7, Gemini 3.1 all ship within weeks</a></h3>
-  <p>The AI model race hits unprecedented pace with OpenAI, Anthropic, and Google all shipping major model updates within weeks of each other in May 2026.</p>
-  <div class="article-card-meta">
-    <span>May 1, 2026</span>
-    <a href="articles/ai-mean-c-06ec046dddb8.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-google-a5339050b4ce.html"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&h=400&fit=crop" alt="DeepMind's ProEval: Proactive failure discovery for AI evaluation" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-google-a5339050b4ce.html" style="color:inherit;text-decoration:none">DeepMind's ProEval: Proactive failure discovery for AI evaluation</a></h3>
-  <p>Google DeepMind researchers published ProEval, a framework for proactively discovering failures in generative AI systems and estimating performance.</p>
-  <div class="article-card-meta">
-    <span>May 10, 2026</span>
-    <a href="articles/ai-google-a5339050b4ce.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-mean-c-678739880eb3.html"><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop" alt="Agentic AI becomes the default expectation in enterprise 2026" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-mean-c-678739880eb3.html" style="color:inherit;text-decoration:none">Agentic AI becomes the default expectation in enterprise 2026</a></h3>
-  <p>Agentic AI systems that plan, execute, and recover autonomously have become the standard expectation, with every major vendor shipping agent capabilities.</p>
-  <div class="article-card-meta">
-    <span>May 1, 2026</span>
-    <a href="articles/ai-mean-c-678739880eb3.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-the-ai-1166b57745a6.html"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" alt="Anthropic released 4 major Claude updates in 50 days" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-the-ai-1166b57745a6.html" style="color:inherit;text-decoration:none">Anthropic released 4 major Claude updates in 50 days</a></h3>
-  <p>Anthropic's blistering release pace of four Claude updates in 50 days signals a strategic shift to rapid iteration over generational model leaps.</p>
-  <div class="article-card-meta">
-    <span>May 9, 2026</span>
-    <a href="articles/ai-the-ai-1166b57745a6.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-google-e95a760fac66.html"><img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=600&h=400&fit=crop" alt="DeepMind: Image generators are generalist vision learners" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-google-e95a760fac66.html" style="color:inherit;text-decoration:none">DeepMind: Image generators are generalist vision learners</a></h3>
-  <p>Google DeepMind research shows image generation models can serve as general-purpose vision learners across diverse computer vision tasks.</p>
-  <div class="article-card-meta">
-    <span>May 8, 2026</span>
-    <a href="articles/ai-google-e95a760fac66.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-techcr-594130c9e9e0.html"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop" alt="AI will anticipate your needs before you know them, says Anthropic exec" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Trends</div>
-  <h3><a href="articles/ai-techcr-594130c9e9e0.html" style="color:inherit;text-decoration:none">AI will anticipate your needs before you know them, says Anthropic exec</a></h3>
-  <p>Anthropic's Cat Wu predicts AI systems will evolve from reactive to proactive, anticipating user needs before they're expressed.</p>
-  <div class="article-card-meta">
-    <span>May 10, 2026</span>
-    <a href="articles/ai-techcr-594130c9e9e0.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="site-branding">
+      <div class="site-title"><a href="index.html">AI NEWS PORTAL</a></div>
+      <div class="site-tagline">Daily AI News, Trends, Tools &amp; Careers</div>
     </div>
-    <p style="text-align:center;margin-bottom:32px"><a href="articles/category-trends.html" style="color:#3b82f6;font-weight:600;text-decoration:none">View all 10 articles →</a></p>
-  </div>
-
-  <div class="section-content" id="section-TOOLS" role="tabpanel">
-    <div class="article-grid">
-      <article class="article-card">
-<a href="articles/ai-openai-ebab523eecde.html"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop" alt="OpenAI releases GPT-5.5 Instant with improved accuracy and conciseness" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-openai-ebab523eecde.html" style="color:inherit;text-decoration:none">OpenAI releases GPT-5.5 Instant with improved accuracy and conciseness</a></h3>
-  <p>GPT-5.5 Instant rolls out to all ChatGPT users with better accuracy, conciseness, image understanding, and integration with past chats and files.</p>
-  <div class="article-card-meta">
-    <span>May 13, 2026</span>
-    <a href="articles/ai-openai-ebab523eecde.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-github-739bf9e4dce9.html"><img src="https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=600&h=400&fit=crop" alt="LLMs-from-scratch: Build a ChatGPT-like LLM in PyTorch" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-github-739bf9e4dce9.html" style="color:inherit;text-decoration:none">LLMs-from-scratch: Build a ChatGPT-like LLM in PyTorch</a></h3>
-  <p>Sebastian Raschka's LLMs-from-scratch guide with 95K GitHub stars walks through building a complete LLM from scratch in PyTorch.</p>
-  <div class="article-card-meta">
-    <span>May 15, 2026</span>
-    <a href="articles/ai-github-739bf9e4dce9.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-nvidia-b30990b4a21a.html"><img src="https://images.unsplash.com/photo-1537432376044-b94f2e0e1fc3?w=600&h=400&fit=crop" alt="NVIDIA launches Ising: open-source AI for quantum computing" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-nvidia-b30990b4a21a.html" style="color:inherit;text-decoration:none">NVIDIA launches Ising: open-source AI for quantum computing</a></h3>
-  <p>NVIDIA released Ising, an open-source AI model family designed to accelerate quantum computing workloads by up to 2x.</p>
-  <div class="article-card-meta">
-    <span>May 8, 2026</span>
-    <a href="articles/ai-nvidia-b30990b4a21a.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-silico-3d3a24ece0fe.html"><img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=600&h=400&fit=crop" alt="Dyna Software launches Platform Copilot for ServiceNow" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-silico-3d3a24ece0fe.html" style="color:inherit;text-decoration:none">Dyna Software launches Platform Copilot for ServiceNow</a></h3>
-  <p>Dyna's Platform Copilot uses agentic AI to autonomously configure and build on ServiceNow, delivering production-ready builds in 80% less time.</p>
-  <div class="article-card-meta">
-    <span>May 5, 2026</span>
-    <a href="articles/ai-silico-3d3a24ece0fe.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-snowfl-c3187cb3c3a3.html"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" alt="Snowflake AI Pulse introduces new agentic capabilities May 2026" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-snowfl-c3187cb3c3a3.html" style="color:inherit;text-decoration:none">Snowflake AI Pulse introduces new agentic capabilities May 2026</a></h3>
-  <p>Snowflake's May 2026 update introduces AI agents, enhanced security for the agentic era, and multimodal data processing capabilities.</p>
-  <div class="article-card-meta">
-    <span>May 12, 2026</span>
-    <a href="articles/ai-snowfl-c3187cb3c3a3.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-github-66879437c8fe.html"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop" alt="Vane: Open-source AI-powered answering engine hits 34K GitHub stars" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Tools</div>
-  <h3><a href="articles/ai-github-66879437c8fe.html" style="color:inherit;text-decoration:none">Vane: Open-source AI-powered answering engine hits 34K GitHub stars</a></h3>
-  <p>Vane combines web search with LLM reasoning to provide accurate, source-backed answers, gaining rapid adoption with 34K GitHub stars.</p>
-  <div class="article-card-meta">
-    <span>May 15, 2026</span>
-    <a href="articles/ai-github-66879437c8fe.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
+    <div class="header-right">
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html#section-trends">TRENDS</a></li>
+          <li><a href="index.html#section-tools">TOOLS</a></li>
+          <li><a href="index.html#section-companies">COMPANIES</a></li>
+          <li><a href="index.html#section-jobs">JOBS</a></li>
+        </ul>
+      </nav>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search articles..." aria-label="Search articles">
+        <button id="searchBtn" aria-label="Search">&#128269;</button>
+      </div>
     </div>
-    <p style="text-align:center;margin-bottom:32px"><a href="articles/category-tools.html" style="color:#3b82f6;font-weight:600;text-decoration:none">View all 14 articles →</a></p>
+  </div>
+</header>
+
+  <!-- Search Results Overlay -->
+  <div id="searchResults" class="search-results-overlay">
+    <div class="search-results-panel"></div>
   </div>
 
-  <div class="section-content" id="section-COMPANIES" role="tabpanel">
-    <div class="article-grid">
-      <article class="article-card">
-<a href="articles/ai-techcr-fe73aa336e29.html"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop" alt="Cerebras raises $5.5B in massive tech IPO" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-techcr-fe73aa336e29.html" style="color:inherit;text-decoration:none">Cerebras raises $5.5B in massive tech IPO</a></h3>
-  <p>Cerebras Systems raised $5.5B in its IPO, with stock popping 108% in the first huge tech IPO of 2026, signaling strong investor appetite for AI hardware.</p>
-  <div class="article-card-meta">
-    <span>May 13, 2026</span>
-    <a href="articles/ai-techcr-fe73aa336e29.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-anthro-fef81a32823b.html"><img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=600&h=400&fit=crop" alt="Anthropic launches Claude Opus 4.7 with improved instruction following" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-anthro-fef81a32823b.html" style="color:inherit;text-decoration:none">Anthropic launches Claude Opus 4.7 with improved instruction following</a></h3>
-  <p>Anthropic released Claude Opus 4.7 featuring enhanced instruction following, file system-based memory, and a new xhigh effort level for complex reasoning.</p>
-  <div class="article-card-meta">
-    <span>May 14, 2026</span>
-    <a href="articles/ai-anthro-fef81a32823b.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-bloomb-7e033804a0ae.html"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop" alt="Anthropic unveils AI agents for financial services" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-bloomb-7e033804a0ae.html" style="color:inherit;text-decoration:none">Anthropic unveils AI agents for financial services</a></h3>
-  <p>Anthropic released new AI agent tools for the financial services sector, expanding beyond coding into banking, insurance, and investment automation.</p>
-  <div class="article-card-meta">
-    <span>May 5, 2026</span>
-    <a href="articles/ai-bloomb-7e033804a0ae.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-techcr-67f2ff30ca7b.html"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&h=400&fit=crop" alt="Sam Altman's business dealings under GOP scrutiny ahead of OpenAI IPO" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-techcr-67f2ff30ca7b.html" style="color:inherit;text-decoration:none">Sam Altman's business dealings under GOP scrutiny ahead of OpenAI IPO</a></h3>
-  <p>Senate Republicans investigate Sam Altman's business practices as OpenAI prepares for what could be the largest tech IPO in history.</p>
-  <div class="article-card-meta">
-    <span>May 14, 2026</span>
-    <a href="articles/ai-techcr-67f2ff30ca7b.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-micros-8956154b4947.html"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" alt="Microsoft invests $10B to build AI-ready Japan" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-micros-8956154b4947.html" style="color:inherit;text-decoration:none">Microsoft invests $10B to build AI-ready Japan</a></h3>
-  <p>Microsoft committed $10 billion to Japan's AI infrastructure, cybersecurity, and workforce training as part of Japan's Sovereign AI strategy.</p>
-  <div class="article-card-meta">
-    <span>May 3, 2026</span>
-    <a href="articles/ai-micros-8956154b4947.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-cnbc-93bb85edaa33.html"><img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop" alt="OpenAI closes record $122B funding round at $852B valuation" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Companies</div>
-  <h3><a href="articles/ai-cnbc-93bb85edaa33.html" style="color:inherit;text-decoration:none">OpenAI closes record $122B funding round at $852B valuation</a></h3>
-  <p>OpenAI closed the largest private venture round in history at $122 billion, co-led by SoftBank and Amazon, targeting an IPO near $1 trillion.</p>
-  <div class="article-card-meta">
-    <span>May 1, 2026</span>
-    <a href="articles/ai-cnbc-93bb85edaa33.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
+  <main>
+    <!-- Featured Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+<article class="featured-card">
+  <a href="article_AI-NEWS-003.html" class="featured-link">
+    <div class="featured-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="Nvidia&#x27;s Huang Bankrolls AI Boom with $90B Deal Spree" loading="lazy">
+      <div class="featured-tag">COMPANIES</div>
     </div>
-    <p style="text-align:center;margin-bottom:32px"><a href="articles/category-companies.html" style="color:#3b82f6;font-weight:600;text-decoration:none">View all 13 articles →</a></p>
-  </div>
-
-  <div class="section-content" id="section-JOBS" role="tabpanel">
-    <div class="article-grid">
-      <article class="article-card">
-<a href="articles/ai-cnbc-45499c330031.html"><img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop" alt="Entry-level jobs requiring AI skills nearly doubled from last year" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-cnbc-45499c330031.html" style="color:inherit;text-decoration:none">Entry-level jobs requiring AI skills nearly doubled from last year</a></h3>
-  <p>A Handshake report shows 10.3% of internships and 4.2% of early-career jobs now require AI skills, nearly double from a year ago.</p>
-  <div class="article-card-meta">
-    <span>May 14, 2026</span>
-    <a href="articles/ai-cnbc-45499c330031.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-times--ec7fff703e3a.html"><img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&h=400&fit=crop" alt="Over 92,000 tech workers laid off in 2026 as AI reshapes workforce" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-times--ec7fff703e3a.html" style="color:inherit;text-decoration:none">Over 92,000 tech workers laid off in 2026 as AI reshapes workforce</a></h3>
-  <p>More than 92,000 tech workers laid off in 2026 as Meta, Microsoft, Amazon and others cite AI-driven efficiency for restructuring.</p>
-  <div class="article-card-meta">
-    <span>May 12, 2026</span>
-    <a href="articles/ai-times--ec7fff703e3a.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-people-38fa1e8ef0b9.html"><img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop" alt="AI layoffs fear overstated, says former Tesla HR chief" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-people-38fa1e8ef0b9.html" style="color:inherit;text-decoration:none">AI layoffs fear overstated, says former Tesla HR chief</a></h3>
-  <p>Former Tesla HR executive says most workers will collaborate with AI tools rather than be replaced, as big tech reshapes workforce.</p>
-  <div class="article-card-meta">
-    <span>May 5, 2026</span>
-    <a href="articles/ai-people-38fa1e8ef0b9.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-dice-591bde103f7a.html"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop" alt="AI engineer tops LinkedIn's fastest-growing roles list for 2026" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-dice-591bde103f7a.html" style="color:inherit;text-decoration:none">AI engineer tops LinkedIn's fastest-growing roles list for 2026</a></h3>
-  <p>LinkedIn ranks AI engineer as the fastest-growing role in 2026, with demand for LangChain, RAG, and PyTorch skills surging across industries.</p>
-  <div class="article-card-meta">
-    <span>May 13, 2026</span>
-    <a href="articles/ai-dice-591bde103f7a.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-cbs-ne-eb38d4eca0aa.html"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop" alt="More companies explicitly cite AI when announcing layoffs" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-cbs-ne-eb38d4eca0aa.html" style="color:inherit;text-decoration:none">More companies explicitly cite AI when announcing layoffs</a></h3>
-  <p>Pinterest, Dow, and others now point to AI adoption when cutting jobs. In 2025, 55,000 layoffs were attributed to AI, 12x more than two years earlier.</p>
-  <div class="article-card-meta">
-    <span>May 5, 2026</span>
-    <a href="articles/ai-cbs-ne-eb38d4eca0aa.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
-<article class="article-card">
-<a href="articles/ai-ventur-7dcad99d127e.html"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" alt="Listen Labs raises $69M after viral billboard AI hiring stunt" loading="lazy"></a>
-<div class="article-card-body">
-  <div class="article-card-category">Jobs</div>
-  <h3><a href="articles/ai-ventur-7dcad99d127e.html" style="color:inherit;text-decoration:none">Listen Labs raises $69M after viral billboard AI hiring stunt</a></h3>
-  <p>AI customer interview startup Listen Labs raised $69M in Series B following a viral billboard campaign targeting AI talent.</p>
-  <div class="article-card-meta">
-    <span>May 10, 2026</span>
-    <a href="articles/ai-ventur-7dcad99d127e.html" class="article-card-link">Read more →</a>
-  </div>
-</div>
-</article>
+    <div class="featured-content">
+      <h2>Nvidia&#x27;s Huang Bankrolls AI Boom with $90B Deal Spree</h2>
+      <p>Nvidia CEO Jensen Huang is making a $90 billion deal spree to bankroll the AI boom, as the company continues to domin...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+        <span class="meta-cat">COMPANIES</span>
+      </div>
+      <span class="read-more-btn">Read More →</span>
     </div>
-    <p style="text-align:center;margin-bottom:32px"><a href="articles/category-jobs.html" style="color:#3b82f6;font-weight:600;text-decoration:none">View all 11 articles →</a></p>
-  </div>
-</div>
-
-<footer class="footer">
-  <p><strong>AI NEWS PORTAL</strong> — Your trusted source for AI industry news</p>
-  <p style="margin-top:4px">© 2026 AI News Portal Inc. All rights reserved.</p>
-</footer>
-
-<script>
-function switchTab(tab) {
-  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section-content').forEach(c => c.classList.remove('active'));
-  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-  document.getElementById('section-' + tab).classList.add('active');
-  document.querySelector('.nav-links a.active')?.classList.remove('active');
-}
-document.querySelectorAll('.section-tab').forEach(t => {
-  t.addEventListener('click', () => switchTab(t.dataset.tab));
-});
-</script>
+  </a>
+</article>
+<article class="featured-card">
+  <a href="article_AI-NEWS-005.html" class="featured-link">
+    <div class="featured-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="Ask YouTube Brings AI-Powered Conversational Search to Video, Adds Gemini Omni to Shorts" loading="lazy">
+      <div class="featured-tag">TOOLS</div>
+    </div>
+    <div class="featured-content">
+      <h2>Ask YouTube Brings AI-Powered Conversational Search to Video, Adds Gemini Omni to Shorts</h2>
+      <p>YouTube launched &#x27;Ask YouTube&#x27; — AI-powered conversational search for video content, and added Gemini Omni to YouTube...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+        <span class="meta-cat">TOOLS</span>
+      </div>
+      <span class="read-more-btn">Read More →</span>
+    </div>
+  </a>
+</article>
+        </div>
+      </div>
+    </section>
+    <section class="section-block" id="section-trends">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>AI Trends & Industry Insights</h2>
+            <span class="section-desc">The latest developments shaping the AI landscape</span>
+          </div>
+          <a href="index.html#section-trends" class="read-more-link">View All &rarr;</a>
+        </div>
+        <div class="section-grid">
+<article class="article-card">
+  <a href="article_AI-NEWS-004.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1620712014215-c8a9f12cd51c?w=800&q=80" alt="Alibaba Unveils New AI Chip for Training and Inferencing" loading="lazy">
+      <span class="card-tag">TRENDS</span>
+    </div>
+    <div class="card-content">
+      <h3>Alibaba Unveils New AI Chip for Training and Inferencing</h3>
+      <p>Alibaba unveiled a new AI chip designed for both training and inference workloads, expanding the competitive landscap...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-025.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1620712014215-c8a9f12cd51c?w=800&q=80" alt="Entire Companies Under AI Psychosis, Says Terraform Creator Mitchell Hashimoto" loading="lazy">
+      <span class="card-tag">TRENDS</span>
+    </div>
+    <div class="card-content">
+      <h3>Entire Companies Under AI Psychosis, Says Terraform Creator Mi...</h3>
+      <p>Terraform creator Mitchell Hashimoto published a viral analysis arguing companies are building meaningless AI workflo...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 16, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-046.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1620712014215-c8a9f12cd51c?w=800&q=80" alt="China&#x27;s Biotech Boom, AI Limits and Regulatory Edge" loading="lazy">
+      <span class="card-tag">TRENDS</span>
+    </div>
+    <div class="card-content">
+      <h3>China&#x27;s Biotech Boom, AI Limits and Regulatory Edge</h3>
+      <p>Bloomberg reports on China&#x27;s biotechnology boom powered by AI, examining the limits and regulatory advantages that sh...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-008.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1620712014215-c8a9f12cd51c?w=800&q=80" alt="Google I/O 2026 Confirmed Lineup: Gemini Spark, Desktop Agent, Android XR Glasses" loading="lazy">
+      <span class="card-tag">TRENDS</span>
+    </div>
+    <div class="card-content">
+      <h3>Google I/O 2026 Confirmed Lineup: Gemini Spark, Desktop Agent,...</h3>
+      <p>Google I/O 2026 keynote lineup includes Gemini Spark persistent 24/7 AI agent, Gemini desktop agent for Mac/PC contro...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 17, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+        </div>
+      </div>
+    </section>
+    <section class="section-block" id="section-tools">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>AI Tools & Product Launches</h2>
+            <span class="section-desc">New AI tools, platforms, and product launches</span>
+          </div>
+          <a href="index.html#section-tools" class="read-more-link">View All &rarr;</a>
+        </div>
+        <div class="section-grid">
+<article class="article-card">
+  <a href="article_AI-NEWS-005.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="Ask YouTube Brings AI-Powered Conversational Search to Video, Adds Gemini Omni to Shorts" loading="lazy">
+      <span class="card-tag">TOOLS</span>
+    </div>
+    <div class="card-content">
+      <h3>Ask YouTube Brings AI-Powered Conversational Search to Video, ...</h3>
+      <p>YouTube launched &#x27;Ask YouTube&#x27; — AI-powered conversational search for video content, and added Gemini Omni to YouTube...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-011.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="OpenAI Launches Personal Finance Feature in ChatGPT" loading="lazy">
+      <span class="card-tag">TOOLS</span>
+    </div>
+    <div class="card-content">
+      <h3>OpenAI Launches Personal Finance Feature in ChatGPT</h3>
+      <p>OpenAI shipped a personal finance experience inside ChatGPT, connecting to users&#x27; financial accounts to provide budge...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 18, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-045.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="New Accessibility Features Powered by Apple Intelligence" loading="lazy">
+      <span class="card-tag">TOOLS</span>
+    </div>
+    <div class="card-content">
+      <h3>New Accessibility Features Powered by Apple Intelligence</h3>
+      <p>Apple announced new accessibility features using Apple Intelligence, including enhanced voice control and assistive t...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 19, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-028.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="SANA-WM: NVIDIA Releases 2.6B Open-Source World Model for 1-Minute 720p Video" loading="lazy">
+      <span class="card-tag">TOOLS</span>
+    </div>
+    <div class="card-content">
+      <h3>SANA-WM: NVIDIA Releases 2.6B Open-Source World Model for 1-Mi...</h3>
+      <p>NVIDIA released SANA-WM, a 2.6 billion parameter open-source world model that generates 1-minute 720p video from text...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 16, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-049.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="OpenClaw: The Fastest-Growing Open-Source Project in GitHub History Passes 210K Stars" loading="lazy">
+      <span class="card-tag">TOOLS</span>
+    </div>
+    <div class="card-content">
+      <h3>OpenClaw: The Fastest-Growing Open-Source Project in GitHub Hi...</h3>
+      <p>OpenClaw, a personal AI assistant that runs entirely on local devices, passed 210,000 GitHub stars. It connects AI mo...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 13, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+        </div>
+      </div>
+    </section>
+    <section class="section-block" id="section-companies">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>AI Companies & Business</h2>
+            <span class="section-desc">Business moves, funding, and corporate strategy in AI</span>
+          </div>
+          <a href="index.html#section-companies" class="read-more-link">View All &rarr;</a>
+        </div>
+        <div class="section-grid">
+<article class="article-card">
+  <a href="article_AI-NEWS-003.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="Nvidia&#x27;s Huang Bankrolls AI Boom with $90B Deal Spree" loading="lazy">
+      <span class="card-tag">COMPANIES</span>
+    </div>
+    <div class="card-content">
+      <h3>Nvidia&#x27;s Huang Bankrolls AI Boom with $90B Deal Spree</h3>
+      <p>Nvidia CEO Jensen Huang is making a $90 billion deal spree to bankroll the AI boom, as the company continues to domin...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-001.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="Anthropic Acquires Stainless — API Documentation Company" loading="lazy">
+      <span class="card-tag">COMPANIES</span>
+    </div>
+    <div class="card-content">
+      <h3>Anthropic Acquires Stainless — API Documentation Company</h3>
+      <p>Anthropic announced acquisition of Stainless, the API documentation company that powers API docs for many leading AI ...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 19, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-006.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="Anthropic&#x27;s $30B Round Co-Led by Sequoia, Dragoneer, Greenoaks, and Altimeter" loading="lazy">
+      <span class="card-tag">COMPANIES</span>
+    </div>
+    <div class="card-content">
+      <h3>Anthropic&#x27;s $30B Round Co-Led by Sequoia, Dragoneer, Greenoaks...</h3>
+      <p>Anthropic&#x27;s fundraising round of at least $30 billion at a $900 billion-plus valuation is co-led by Sequoia Capital, ...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 17, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-048.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="OpenAI&#x27;s Consulting Arm DeployCo Attracts Major Private Equity Firms" loading="lazy">
+      <span class="card-tag">COMPANIES</span>
+    </div>
+    <div class="card-content">
+      <h3>OpenAI&#x27;s Consulting Arm DeployCo Attracts Major Private Equity...</h3>
+      <p>OpenAI&#x27;s new consulting arm DeployCo is attracting major private equity and consulting firms as enterprises seek help...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 13, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-039.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" alt="Meta&#x27;s New Reality: Record High Profits, Record Low Morale" loading="lazy">
+      <span class="card-tag">COMPANIES</span>
+    </div>
+    <div class="card-content">
+      <h3>Meta&#x27;s New Reality: Record High Profits, Record Low Morale</h3>
+      <p>Wired published a feature on Meta&#x27;s current state amid layoffs and AI push, revealing record profits but employee mor...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 14, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+        </div>
+      </div>
+    </section>
+    <section class="section-block" id="section-jobs">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>AI Careers & Workforce Impact</h2>
+            <span class="section-desc">How AI is transforming careers and the workforce</span>
+          </div>
+          <a href="index.html#section-jobs" class="read-more-link">View All &rarr;</a>
+        </div>
+        <div class="section-grid">
+<article class="article-card">
+  <a href="article_AI-NEWS-050.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Goldman Sachs Estimates 300 Million Jobs Exposed to AI Automation Globally" loading="lazy">
+      <span class="card-tag">JOBS</span>
+    </div>
+    <div class="card-content">
+      <h3>Goldman Sachs Estimates 300 Million Jobs Exposed to AI Automat...</h3>
+      <p>Goldman Sachs Research estimates that 300 million jobs globally are exposed to automation by AI over a 10-year period...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 19, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-043.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Over 70,000 Workers Already Impacted by AI-Driven Layoffs in 2026" loading="lazy">
+      <span class="card-tag">JOBS</span>
+    </div>
+    <div class="card-content">
+      <h3>Over 70,000 Workers Already Impacted by AI-Driven Layoffs in 2026</h3>
+      <p>More than 70,000 employees have been impacted by AI-driven layoffs in 2026 across 45+ companies. Over 100,000 were af...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 19, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-012.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="White-Collar Workers Report Growing Feelings of &#x27;AI Brain Fry&#x27;" loading="lazy">
+      <span class="card-tag">JOBS</span>
+    </div>
+    <div class="card-content">
+      <h3>White-Collar Workers Report Growing Feelings of &#x27;AI Brain Fry&#x27;</h3>
+      <p>White-collar workers are increasingly reporting cognitive exhaustion and &#x27;AI brain fry&#x27; as they struggle to adapt to ...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+<article class="article-card">
+  <a href="article_AI-NEWS-017.html" class="card-link">
+    <div class="card-image">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Harvey AI&#x27;s Winston Weinberg: Why AI Will Force Lawyers to Change Their Fee Structure" loading="lazy">
+      <span class="card-tag">JOBS</span>
+    </div>
+    <div class="card-content">
+      <h3>Harvey AI&#x27;s Winston Weinberg: Why AI Will Force Lawyers to Cha...</h3>
+      <p>Harvey AI co-founder discusses how AI will fundamentally alter legal fee structures, moving from billable hours to va...</p>
+      <div class="article-meta">
+        <span class="meta-date">May 20, 2026</span>
+        <span class="meta-read">1 min read</span>
+      </div>
+      <span class="read-more-link">Read More →</span>
+    </div>
+  </a>
+</article>
+        </div>
+      </div>
+    </section>
+  </main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>AI NEWS PORTAL</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#section-trends">Trends</a></li>
+          <li><a href="index.html#section-tools">Tools</a></li>
+          <li><a href="index.html#section-companies">Companies</a></li>
+          <li><a href="index.html#section-jobs">Jobs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>TRENDS</h4>
+        <ul>
+  <script src="js/search.js"></script>
 </body>
 </html>

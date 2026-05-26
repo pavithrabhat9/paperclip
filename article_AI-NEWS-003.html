@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nvidia&#x27;s Huang Bankrolls AI Boom with $90B Deal Spree - AI NEWS PORTAL</title>
+  <meta name="description" content="Nvidia CEO Jensen Huang is making a $90 billion deal spree to bankroll the AI boom, as the company continues to dominate the AI hardware market with its Blackwe">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="site-branding">
+      <div class="site-title"><a href="index.html">AI NEWS PORTAL</a></div>
+      <div class="site-tagline">Daily AI News, Trends, Tools &amp; Careers</div>
+    </div>
+    <div class="header-right">
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html#section-trends">TRENDS</a></li>
+          <li><a href="index.html#section-tools">TOOLS</a></li>
+          <li><a href="index.html#section-companies">COMPANIES</a></li>
+          <li><a href="index.html#section-jobs">JOBS</a></li>
+        </ul>
+      </nav>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search articles..." aria-label="Search articles">
+        <button id="searchBtn" aria-label="Search">&#128269;</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <main class="article-detail">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a> &gt;
+      <a href="index.html#section-{sec.lower()}">{esc(section)}</a> &gt;
+      <span>{esc(truncate(title, 60))}</span>
+    </nav>
+
+    <a href="index.html#section-{sec.lower()}" class="back-link">&larr; Back to {esc(section)}</a>
+
+    <article>
+      <header class="article-header">
+        <span class="category-tag">{esc(section)}</span>
+        <h1>{esc(title)}</h1>
+        <div class="article-header-meta">
+          <span>{date_str}</span>
+          <span class="sep">|</span>
+          <span>{read_time} min read</span>
+        </div>
+
+        <div class="share-actions">
+          <button class="share-btn twitter" onclick="window.open('https://twitter.com/intent/tweet?text={esc(title)}&url='+encodeURIComponent(window.location.href),'_blank')" aria-label="Share on Twitter">&#120143; Twitter</button>
+          <button class="share-btn facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(window.location.href),'_blank')" aria-label="Share on Facebook">&#102; Facebook</button>
+          <button class="share-btn linkedin" onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(window.location.href),'_blank')" aria-label="Share on LinkedIn">&#105; LinkedIn</button>
+          <button class="share-btn bookmark bookmark-btn" data-article-id="{esc(article_id)}" aria-label="Bookmark this article">&#9734;</button>
+          <button class="share-btn copy copy-link-btn" aria-label="Copy link to clipboard">&#128279;</button>
+        </div>
+
+        <img src="{img}" alt="{esc(title)}" class="featured-image-detail" loading="lazy">
+      </header>
+
+      <div class="tags-section">
+        <span class="tag">{esc(section)}</span>
+      </div>
+
+      <div class="article-body">
+        {body_html}
+      </div>
+
+      {takeaways_html}
+
+      <div class="comments-note">
+        Comments are not yet enabled on this portal.
+      </div>
+
+      {related_html}
+    </article>
+  </main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>AI NEWS PORTAL</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#section-trends">Trends</a></li>
+          <li><a href="index.html#section-tools">Tools</a></li>
+          <li><a href="index.html#section-companies">Companies</a></li>
+          <li><a href="index.html#section-jobs">Jobs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>TRENDS</h4>
+        <ul>
+  <script src="js/search.js"></script>
+</body>
+</html>
